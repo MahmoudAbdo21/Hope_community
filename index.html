@@ -3,602 +3,382 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">مجتمع الأمل</title>
+    <title>مجتمع الأمل | الواجهة الاحترافية</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* ================= الألوان والتصميم الأساسي ================= */
-        :root {
-            --primary: #6C63FF; 
-            --secondary: #FF6584; 
-            --bg-color: #F4F7FE; 
-            --text-dark: #2B3674;
-            --card-bg: #FFFFFF;
-        }
-        body { background-color: var(--bg-color); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; overflow-x: hidden; }
-        
-        /* Navbar & Sidebar */
-        .top-navbar { background: linear-gradient(90deg, var(--primary) 0%, #8A84FF 100%); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .menu-btn { font-size: 24px; cursor: pointer; color: white; background: none; border: none; }
-        .brand-logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: bold; }
-        .brand-logo img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: white; }
-        
-        .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100vh; background-color: var(--card-bg); box-shadow: -2px 0 10px rgba(0,0,0,0.1); transition: 0.4s ease; z-index: 1001; display: flex; flex-direction: column; overflow-y: auto;}
-        .sidebar.active { right: 0; }
-        .close-btn { align-self: flex-end; padding: 15px; font-size: 24px; cursor: pointer; color: var(--text-dark); }
-        .nav-link { padding: 15px 25px; color: var(--text-dark); font-size: 18px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { background-color: var(--bg-color); color: var(--primary); border-right: 5px solid var(--primary); }
-        .nav-link i { width: 30px; text-align: center; font-size: 22px; }
-        .secret-admin-trigger { margin-top: auto; padding: 15px; color: #ccc; cursor: pointer; text-align: left; }
-
-        /* Content Pages */
-        .page-content { padding: 20px; max-width: 800px; margin: 0 auto; display: none; animation: fadeIn 0.4s; }
-        .page-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Admin Elements */
-        .admin-only { display: none; }
-        .card-box { background: var(--card-bg); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .input-styled { width: 100%; border: 2px solid #E2E8F0; border-radius: 15px; padding: 12px; margin-bottom: 15px; outline: none; transition: 0.3s; background: #F8FAFC; }
-        .input-styled:focus { border-color: var(--primary); background: white; }
-        .btn-styled { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 15px; font-weight: bold; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
-        .btn-styled:hover { background: #554DFF; }
-        .btn-danger-styled { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 10px; cursor: pointer; }
-        
-        /* Posts & Cards Display */
-        .post-card { background: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
-        .post-header { display: flex; justify-content: space-between; margin-bottom: 15px; }
-        .media-display { width: 100%; border-radius: 15px; margin-top: 15px; max-height: 400px; object-fit: contain; background: #000;}
-        .video-iframe { width: 100%; height: 350px; border-radius: 15px; margin-top: 15px; border: none; background: #f0f0f0; }
-        
-        /* Category Grid */
-        .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        .cat-btn { background: linear-gradient(135deg, var(--primary), #8A84FF); color: white; padding: 20px; border-radius: 15px; text-align: center; cursor: pointer; font-weight: bold; font-size: 18px; box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3); transition: transform 0.2s; position: relative; }
-        .cat-btn:hover { transform: translateY(-5px); }
-        
-        /* Social Icons */
-        .social-links a { display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px; border-radius: 50%; color: white; font-size: 20px; margin: 0 5px; text-decoration: none; transition: 0.3s; }
-        .social-links a.fb { background: #1877F2; }
-        .social-links a.in { background: #0A66C2; }
-        .social-links a.ig { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
-        .social-links a:hover { transform: scale(1.1); }
-
-        .overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 1000; display: none; }
-        .overlay.active { display: block; }
-        .data-management { background: #fff3cd; border: 1px solid #ffe69c; padding: 15px; border-radius: 15px; margin-top: 20px; }
-    </style>
+    <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
-    <header class="top-navbar">
-        <button class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
-        <div class="brand-logo">
-            <img src="https://cdn-icons-png.flaticon.com/512/3114/3114883.png" id="display-logo" alt="Logo">
-            <span id="display-name">مجتمع الأمل</span>
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-content text-center">
+            <img src="img/logo.png" alt="Logo" class="pulse-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3114/3114883.png'">
+            <h2 class="mt-4 text-neon fw-bold">مجتمع الأمل</h2>
+            <p class="text-white">جاري التجهيز...</p>
+            <div class="loader mx-auto mt-3"></div>
         </div>
-        <div style="width: 24px;"></div>
-    </header>
+    </div>
 
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <nav class="custom-navbar">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="brand-logo">
+                <img src="img/logo.png" id="display-logo" alt="Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3114/3114883.png'">
+                <span id="display-name">مجتمع الأمل</span>
+            </div>
+            
+            <div class="nav-links d-none d-xl-flex">
+                <a class="nav-item active" onclick="switchTab('home')">الرئيسية</a>
+                <a class="nav-item" onclick="switchTab('news')">الأخبار</a>
+                <a class="nav-item" onclick="switchTab('signs')">الإشارات</a>
+                <a class="nav-item" onclick="switchTab('books')">المكتبة</a>
+                <a class="nav-item" onclick="switchTab('schools')">المدارس</a>
+                <a class="nav-item text-warning" onclick="switchTab('chat')"><i class="fa-solid fa-microphone"></i> تواصل</a>
+                <a class="nav-link admin-only text-danger" onclick="switchTab('settings')" style="display: none;"><i class="fa-solid fa-gear"></i></a>
+            </div>
 
-    <nav class="sidebar" id="sidebar">
-        <div class="close-btn" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></div>
-        <div class="nav-link active" onclick="switchTab('news')"><i class="fa-regular fa-newspaper"></i> الأخبار</div>
-        <div class="nav-link" onclick="switchTab('signs')"><i class="fa-solid fa-hand-sparkles"></i> الإشارات</div>
-        <div class="nav-link" onclick="switchTab('books')"><i class="fa-solid fa-book-open"></i> المكتبة</div>
-        <div class="nav-link" onclick="switchTab('about')"><i class="fa-solid fa-circle-info"></i> من نحن</div>
-        
-        <div class="nav-link admin-only" onclick="switchTab('settings')"><i class="fa-solid fa-gear"></i> الإعدادات</div>
-        <div class="nav-link admin-only" onclick="exitAdminMode()" style="color: #ff4d4d; border-top: 1px solid #eee; margin-top: 10px;">
-            <i class="fa-solid fa-right-from-bracket"></i> خروج من الإدارة
+            <div class="nav-buttons">
+                <button class="btn-ghost secret-admin-trigger me-2" onclick="promptAdminPin()" title="الإدارة (دخول/خروج)"><i class="fa-solid fa-lock" id="admin-lock-icon" style="color: #777E90;"></i></button>
+                <button class="btn-menu d-xl-none" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+            </div>
         </div>
-        <div class="secret-admin-trigger" onclick="promptAdminPin()" title="منطقة الإدارة المخفية"><i class="fa-solid fa-lock"></i></div>
     </nav>
 
-    <main class="page-content active" id="news-tab">
-        <div class="card-box admin-only">
-            <h5><i class="fa-solid fa-pen-nib"></i> نشر خبر جديد</h5>
-            <textarea id="news-text" class="input-styled" rows="3" placeholder="اكتب الخبر هنا..."></textarea>
-            
-            <div class="d-flex flex-column gap-2 mb-3">
-                <label class="btn-styled" style="background: #e2e8f0; color: #333;">
-                    <i class="fa-solid fa-image"></i> اختر صورة من الجهاز
-                    <input type="file" id="news-image" accept="image/*" style="display: none;" onchange="previewNewsImage(event)">
-                </label>
-                <img id="news-preview" style="max-height: 150px; display: none; border-radius: 10px;">
-                <input type="text" id="news-video-url" class="input-styled mb-0" placeholder="رابط خارجي (يوتيوب أو جوجل درايف)...">
-            </div>
-            
-            <button class="btn-styled w-100" onclick="addNews()"><i class="fa-solid fa-paper-plane"></i> نشر</button>
-        </div>
-        <div id="news-feed"></div>
-    </main>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <nav class="mobile-sidebar" id="sidebar">
+        <div class="close-btn" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></div>
+        <a class="nav-item-mobile active" onclick="switchTab('home')"><i class="fa-solid fa-house"></i> الرئيسية</a>
+        <a class="nav-item-mobile" onclick="switchTab('news')"><i class="fa-regular fa-newspaper"></i> الأخبار</a>
+        <a class="nav-item-mobile" onclick="switchTab('signs')"><i class="fa-solid fa-hand-sparkles"></i> الإشارات</a>
+        <a class="nav-item-mobile" onclick="switchTab('books')"><i class="fa-solid fa-book-open"></i> المكتبة</a>
+        <a class="nav-item-mobile" onclick="switchTab('schools')"><i class="fa-solid fa-school"></i> المدارس</a>
+        <a class="nav-item-mobile text-warning" onclick="switchTab('chat')"><i class="fa-solid fa-microphone"></i> تواصل صوتي</a>
+        <a class="nav-item-mobile admin-only text-danger" onclick="switchTab('settings')" style="display: none;"><i class="fa-solid fa-gear"></i> الإعدادات</a>
+    </nav>
 
-    <main class="page-content" id="signs-tab">
-        <div id="signs-categories-view">
-            <div class="card-box admin-only">
-                <h5>إضافة قسم إشارات جديد</h5>
-                <input type="text" id="new-sign-cat-name" class="input-styled" placeholder="اسم القسم (مثال: الأرقام، العائلة...)">
-                <button class="btn-styled" onclick="addCategory('signs')">إضافة القسم</button>
-            </div>
-            <div class="category-grid" id="signs-categories-grid"></div>
-        </div>
-
-        <div id="signs-items-view" style="display: none;">
-            <button class="btn-styled mb-3" style="background:#ccc; color:#000;" onclick="goBackToCategories('signs')"><i class="fa-solid fa-arrow-right"></i> رجوع للأقسام</button>
-            <h3 id="current-sign-cat-title" class="mb-4 text-primary"></h3>
-
-            <div class="card-box admin-only">
-                <h5>إضافة إشارة جديدة</h5>
-                <input type="text" id="sign-title" class="input-styled" placeholder="اسم الإشارة">
-                <textarea id="sign-desc" class="input-styled" rows="2" placeholder="شرح الإشارة..."></textarea>
-                <label class="btn-styled mb-2 w-100" style="background: #e2e8f0; color: #333;"><i class="fa-solid fa-image"></i> إرفاق صورة
-                    <input type="file" id="sign-img" accept="image/*" style="display: none;">
-                </label>
-                <input type="text" id="sign-video" class="input-styled" placeholder="رابط يوتيوب أو جوجل درايف (اختياري)">
-                <button class="btn-styled w-100" onclick="addItem('signs')">حفظ الإشارة</button>
-            </div>
-            <div id="signs-items-list"></div>
-        </div>
-    </main>
-
-    <main class="page-content" id="books-tab">
-        <div id="books-categories-view">
-            <div class="card-box admin-only">
-                <h5>إضافة تصنيف كتب جديد</h5>
-                <input type="text" id="new-book-cat-name" class="input-styled" placeholder="اسم التصنيف (ثقافية، تاريخية...)">
-                <button class="btn-styled" onclick="addCategory('books')">إضافة التصنيف</button>
-            </div>
-            <div class="category-grid" id="books-categories-grid"></div>
-        </div>
-
-        <div id="books-items-view" style="display: none;">
-            <button class="btn-styled mb-3" style="background:#ccc; color:#000;" onclick="goBackToCategories('books')"><i class="fa-solid fa-arrow-right"></i> رجوع للتصنيفات</button>
-            <h3 id="current-book-cat-title" class="mb-4 text-primary"></h3>
-
-            <div class="card-box admin-only">
-                <h5>إضافة كتاب جديد</h5>
-                <input type="text" id="book-title" class="input-styled" placeholder="اسم الكتاب">
-                <textarea id="book-desc" class="input-styled" rows="2" placeholder="نبذة عن الكتاب..."></textarea>
-                <label class="btn-styled mb-2 w-100" style="background: #e2e8f0; color: #333;"><i class="fa-solid fa-image"></i> صورة الغلاف
-                    <input type="file" id="book-img" accept="image/*" style="display: none;">
-                </label>
-                <input type="text" id="book-video" class="input-styled" placeholder="رابط يوتيوب أو جوجل درايف (اختياري)">
-                <button class="btn-styled w-100" onclick="addItem('books')">إضافة الكتاب</button>
-            </div>
-            <div id="books-items-list"></div>
-        </div>
-    </main>
-
-    <main class="page-content" id="about-tab">
-        <div class="card-box text-center mt-4">
-            <img id="about-profile-pic" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 15px; border: 3px solid var(--primary);">
-            <h3 style="color: var(--text-dark);">محمود عبدالرحن عبدالله حجاج</h3>
-            <p class="text-muted">طالب بكلية التربية النوعية - تكنولوجيا التعليم - جامعة حلوان</p>
-            <hr>
-            <p style="font-size: 18px; line-height: 1.6;">هذا الموقع هو مشروع تعليمي متكامل يهدف إلى خدمة ذوي الهمم (الصم وضعاف السمع)، وتوفير بيئة تفاعلية بصرية تساهم في دمجهم في المجتمع من خلال توفير الأخبار، وتعلم لغة الإشارة، ومكتبة معرفية مخصصة.</p>
-            
-            <div class="social-links mt-4">
-                <a href="https://www.facebook.com/mahmoud.abdalrahaman.hagag/" target="_blank" class="fb" title="فيسبوك"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="https://www.linkedin.com/in/mahmoud-hagag-145127346" target="_blank" class="in" title="لينكد إن"><i class="fa-brands fa-linkedin-in"></i></a>
-                <a href="https://www.instagram.com/mahmoud_abdelrhman_1" target="_blank" class="ig" title="إنستجرام"><i class="fa-brands fa-instagram"></i></a>
-            </div>
-        </div>
-    </main>
-
-    <main class="page-content" id="settings-tab">
-        <div class="card-box">
-            <h4 class="mb-4"><i class="fa-solid fa-palette"></i> تخصيص هوية الموقع</h4>
-            
-            <label class="fw-bold mb-2">اسم الموقع:</label>
-            <input type="text" id="setting-name" class="input-styled" placeholder="مثال: مجتمع الأمل">
-            
-            <label class="fw-bold mb-2 mt-3">لوجو الموقع (اختر واحدة من الطريقتين):</label>
-            <input type="text" id="setting-logo-url" class="input-styled mb-2" placeholder="الطريقة 1: ضع رابط الصورة هنا (URL)">
-            
-            <label class="btn-styled w-100 mb-2" style="background: #e2e8f0; color: #333;">
-                <i class="fa-solid fa-upload"></i> الطريقة 2: رفع صورة اللوجو من الجهاز
-                <input type="file" id="setting-logo-file" accept="image/*" style="display: none;" onchange="previewLogoFile(event)">
-            </label>
-            
-            <div class="text-center mt-2 mb-3">
-                <img id="setting-logo-preview" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 2px solid var(--primary);">
-            </div>
-
-            <button class="btn-styled w-100" onclick="saveSiteSettings()"><i class="fa-solid fa-floppy-disk"></i> حفظ اسم الموقع واللوجو</button>
-            
-            <hr class="my-4">
-            
-            <h5 class="mb-3"><i class="fa-solid fa-user-tie"></i> صورتك الشخصية (تظهر في من نحن والأخبار)</h5>
-            <label class="btn-styled w-100 mb-3" style="background: #e2e8f0; color: #333;">
-                <i class="fa-solid fa-upload"></i> اختر صورتك الشخصية
-                <input type="file" accept="image/*" style="display: none;" onchange="updateProfilePic(event)">
-            </label>
-
-            <div class="data-management">
-                <h5 class="mb-3" style="color: #856404;"><i class="fa-solid fa-database"></i> إدارة ونقل البيانات</h5>
-                <p style="font-size: 14px; color: #664d03;">استخدم الأزرار أدناه لحفظ نسخة من بيانات الموقع (أخبار، كتب، إشارات) أو استعادتها.</p>
-                <button class="btn-styled w-100 mb-2" style="background: #28a745;" onclick="exportData()">
-                    <i class="fa-solid fa-download"></i> تصدير البيانات (تحميل ملف)
-                </button>
-                <label class="btn-styled w-100" style="background: #17a2b8;">
-                    <i class="fa-solid fa-file-import"></i> استيراد البيانات (رفع ملف)
-                    <input type="file" accept=".json" style="display: none;" onchange="importData(event)">
-                </label>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        // المتغيرات الأساسية
-        let isAdmin = localStorage.getItem('isAdmin') === 'true';
-        let currentOpenCategory = { type: null, name: null };
-        let tempLogoBase64 = null; // للاحتفاظ باللوجو المرفوع مؤقتاً قبل الحفظ
-
-        // تشغيل الوظائف عند فتح الصفحة
-        window.onload = function() {
-            applyAdminRights();
-            loadSettings();
-            loadProfilePic();
-            loadNews();
-            loadCategories('signs');
-            loadCategories('books');
-        };
-
-        // --- التحكم في القوائم والصفحات ---
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            document.getElementById(tabId + '-tab').classList.add('active');
-            event.currentTarget.classList.add('active');
-            if(window.innerWidth < 768) toggleMenu();
-        }
-
-        // --- نظام الإدارة ---
-        function promptAdminPin() {
-            if(isAdmin) { alert("أنت بالفعل مدير الموقع!"); return; }
-            if(prompt("أدخل الرقم السري:") === "2026") {
-                localStorage.setItem('isAdmin', 'true'); 
-                isAdmin = true;
-                alert("تم التفعيل!"); 
-                location.reload();
-            } else { 
-                alert("رمز خاطئ!"); 
-            }
-        }
-
-        function applyAdminRights() {
-            if(isAdmin) { 
-                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block'); 
-            }
-        }
-
-        function exitAdminMode() {
-            if(confirm('هل أنت متأكد من تسجيل الخروج من وضع الإدارة؟')) {
-                localStorage.setItem('isAdmin', 'false'); 
-                location.reload();
-            }
-        }
-
-        // --- أدوات ضغط الصور والروابط الذكية ---
-        function compressImage(file, callback) {
-            if(!file) { callback(null); return; }
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = event => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 600; 
-                    let width = img.width; let height = img.height;
-                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                    canvas.width = width; canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    callback(canvas.toDataURL('image/jpeg', 0.5)); // ضغط الجودة لـ 50%
-                }
-            }
-        }
-
-        function convertSmartUrl(url) {
-            if (!url) return null;
-            let ytMatch = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
-            if (ytMatch && ytMatch[2].length == 11) return 'https://www.youtube.com/embed/' + ytMatch[2];
-            let driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
-            if (driveMatch) return 'https://drive.google.com/file/d/' + driveMatch[1] + '/preview';
-            return url;
-        }
-
-        // --- إعدادات الموقع (الاسم، اللوجو، الصورة الشخصية) ---
-        function loadSettings() {
-            let name = localStorage.getItem('siteName') || 'مجتمع الأمل';
-            let logo = localStorage.getItem('siteLogo') || 'https://cdn-icons-png.flaticon.com/512/3114/3114883.png';
-            
-            document.getElementById('display-name').innerText = name;
-            document.getElementById('display-logo').src = logo;
-            document.getElementById('page-title').innerText = name;
-            document.getElementById('setting-name').value = name;
-            document.getElementById('setting-logo-preview').src = logo;
-        }
-
-        function previewLogoFile(event) {
-            compressImage(event.target.files[0], compressedData => {
-                tempLogoBase64 = compressedData;
-                document.getElementById('setting-logo-preview').src = compressedData;
-                document.getElementById('setting-logo-url').value = ''; // تفريغ الرابط لأننا اخترنا ملف
-            });
-        }
-
-        function saveSiteSettings() {
-            let newName = document.getElementById('setting-name').value;
-            let newLogoUrl = document.getElementById('setting-logo-url').value;
-
-            if(newName) localStorage.setItem('siteName', newName);
-
-            if(tempLogoBase64) {
-                // لو رفع صورة من الجهاز
-                localStorage.setItem('siteLogo', tempLogoBase64);
-                tempLogoBase64 = null;
-                document.getElementById('setting-logo-file').value = '';
-            } else if (newLogoUrl) {
-                // لو حط رابط
-                localStorage.setItem('siteLogo', newLogoUrl);
-            }
-
-            loadSettings();
-            alert('تم حفظ اسم الموقع واللوجو بنجاح!');
-        }
-
-        function loadProfilePic() {
-            let pic = localStorage.getItem('adminProfilePic') || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
-            document.getElementById('about-profile-pic').src = pic;
-            return pic; // يرجع الصورة عشان نستخدمها في الأخبار
-        }
-
-        function updateProfilePic(event) {
-            compressImage(event.target.files[0], compressedData => {
-                localStorage.setItem('adminProfilePic', compressedData);
-                loadProfilePic(); 
-                loadNews(); // تحديث الأخبار لعرض الصورة الجديدة
-                alert('تم تغيير صورتك الشخصية بنجاح!');
-            });
-        }
-
-        // --- نظام التصدير والاستيراد ---
-        function exportData() {
-            let backupData = {
-                siteName: localStorage.getItem('siteName'),
-                siteLogo: localStorage.getItem('siteLogo'),
-                adminProfilePic: localStorage.getItem('adminProfilePic'),
-                my_news_v1: localStorage.getItem('my_news_v1'),
-                signs_cats: localStorage.getItem('signs_cats'),
-                books_cats: localStorage.getItem('books_cats')
-            };
-            let dataStr = JSON.stringify(backupData);
-            let blob = new Blob([dataStr], {type: "application/json"});
-            let url = URL.createObjectURL(blob);
-            let a = document.createElement('a');
-            a.href = url; a.download = "بيانات_موقع_مجتمع_الامل.json";
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        }
-
-        function importData(event) {
-            let file = event.target.files[0];
-            if(!file) return;
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    let importedData = JSON.parse(e.target.result);
-                    if(importedData.siteName) localStorage.setItem('siteName', importedData.siteName);
-                    if(importedData.siteLogo) localStorage.setItem('siteLogo', importedData.siteLogo);
-                    if(importedData.adminProfilePic) localStorage.setItem('adminProfilePic', importedData.adminProfilePic);
-                    if(importedData.my_news_v1) localStorage.setItem('my_news_v1', importedData.my_news_v1);
-                    if(importedData.signs_cats) localStorage.setItem('signs_cats', importedData.signs_cats);
-                    if(importedData.books_cats) localStorage.setItem('books_cats', importedData.books_cats);
-                    
-                    alert("تم استيراد البيانات بنجاح! سيتم تحديث الصفحة.");
-                    location.reload();
-                } catch(err) { alert("عذراً، ملف البيانات تالف!"); }
-            };
-            reader.readAsText(file);
-        }
-
-        // --- نظام الأخبار ---
-        let currentNewsImageBase64 = null;
-        function previewNewsImage(event) {
-            compressImage(event.target.files[0], compressedData => {
-                currentNewsImageBase64 = compressedData;
-                let preview = document.getElementById('news-preview');
-                preview.src = compressedData; preview.style.display = 'block';
-            });
-        }
-
-        function addNews() {
-            let text = document.getElementById('news-text').value;
-            let videoUrlRaw = document.getElementById('news-video-url').value;
-            let finalUrl = convertSmartUrl(videoUrlRaw);
-            
-            if(!text && !currentNewsImageBase64 && !finalUrl) return;
-
-            let posts = JSON.parse(localStorage.getItem('my_news_v1')) || [];
-            let dateStr = new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            
-            posts.unshift({ id: Date.now(), text: text, image: currentNewsImageBase64, videoUrl: finalUrl, date: dateStr });
-            localStorage.setItem('my_news_v1', JSON.stringify(posts));
-
-            // تفريغ المدخلات بعد النشر
-            document.getElementById('news-text').value = ''; 
-            document.getElementById('news-video-url').value = ''; 
-            document.getElementById('news-image').value = ''; 
-            document.getElementById('news-preview').style.display = 'none'; 
-            currentNewsImageBase64 = null; 
-            
-            loadNews();
-        }
-
-        function loadNews() {
-            let posts = JSON.parse(localStorage.getItem('my_news_v1')) || [];
-            let feed = document.getElementById('news-feed');
-            let adminPic = loadProfilePic();
-            
-            feed.innerHTML = '';
-            posts.forEach(p => {
-                let imgHTML = p.image ? `<img src="${p.image}" class="media-display">` : '';
-                let vidHTML = p.videoUrl ? `<iframe src="${p.videoUrl}" class="video-iframe" allowfullscreen></iframe>` : '';
-                let delBtn = isAdmin ? `<button class="btn-danger-styled" onclick="deleteNews(${p.id})"><i class="fa-solid fa-trash"></i></button>` : '';
+    <div class="container main-container">
+        
+        <main class="page-content active" id="home-tab">
+            <div class="row align-items-center min-vh-75 mt-5">
+                <div class="col-md-6 text-right z-index-2">
+                    <h2 class="text-warning mb-2">مرحباً،</h2>
+                    <h1 class="display-4 fw-bold text-white mb-2">انا محمود عبدالرحمن</h1>
+                    <h3 class="text-neon mb-4">تكنولوجيا التعليم - جامعة العاصمة</h3>
+                    <p class="fs-5 mb-4" style="max-width: 90%; color: #E2E8F0; line-height: 1.8;">
+                        هذه المنصة هي مشروع متكامل يهدف إلى دمج وتسهيل التواصل لذوي الهمم (الصم وضعاف السمع) باستخدام أحدث أدوات التكنولوجيا وتصميم واجهات المستخدم.
+                    </p>
+                    <div class="social-links mb-5">
+                        <a href="https://www.facebook.com/mahmoud.abdalrahaman.hagag/" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/in/mahmoud-hagag-145127346" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/mahmoud_abdelrhman_1" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                    <button class="btn-neon-large" onclick="switchTab('news')">تصفح المنصة <i class="fa-solid fa-arrow-left ms-2"></i></button>
+                </div>
                 
-                feed.innerHTML += `
-                    <div class="post-card">
-                        <div class="post-header">
-                            <div class="d-flex align-items-center gap-3">
-                                <img src="${adminPic}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
-                                <div><div style="font-weight:bold; color:var(--text-dark);">محمود حجاج</div><div style="font-size:12px; color:gray;">${p.date}</div></div>
+                <div class="col-md-6 text-center position-relative mt-5 mt-md-0">
+                    <div class="hero-image-wrapper">
+                        <img src="img/profile.png" alt="محمود" id="home-profile-pic" class="hero-image" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                        <div class="floating-badge badge-1" title="تكنولوجيا التعليم"><i class="fa-solid fa-laptop-code"></i></div>
+                        <div class="floating-badge badge-2" title="لغة الإشارة"><i class="fa-solid fa-hands-asl-interpreting"></i></div>
+                        <div class="floating-badge badge-3" title="دعم ذوي الهمم"><i class="fa-solid fa-universal-access"></i></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <main class="page-content" id="news-tab">
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-8">
+                    
+                    <div class="card-dark admin-only mb-4" style="display: none;">
+    <h5 class="text-neon mb-3"><i class="fa-solid fa-pen-nib"></i> إضافة خبر جديد</h5>
+    <input type="text" id="news-title" class="input-dark mb-2" placeholder="عنوان الخبر (إجباري)...">
+    <textarea id="news-text" class="input-dark mb-2" rows="3" placeholder="اكتب تفاصيل الخبر هنا..."></textarea>
+    <div class="d-flex gap-2 mt-2 mb-2">
+        <select id="news-media-type" class="input-dark w-25 mb-0" style="padding: 10px;">
+            <option value="youtube">يوتيوب</option>
+            <option value="drive">جوجل درايف</option>
+            <option value="image_link">صورة برابط</option>
+            <option value="link">رابط عادي</option>
+        </select>
+        <input type="text" id="news-media-url" class="input-dark w-50 mb-0" placeholder="ضع الرابط هنا...">
+        <label class="btn-outline w-25 text-center mb-0" style="padding: 10px; cursor:pointer;"><i class="fa-solid fa-upload"></i> رفع صورة <input type="file" id="news-image" style="display: none;" onchange="previewNewsImage(event)"></label>
+    </div>
+    <img id="news-preview" class="media-preview" style="display: none;">
+    <button class="btn-neon w-100 mt-3" onclick="addNews()">نشر الخبر</button>
+</div>
+
+
+                    <div id="news-feed"></div>
+                    
+                </div>
+            </div>
+        </main>
+
+        <main class="page-content" id="signs-tab">
+            <div id="signs-categories-view">
+                <div class="card-dark admin-only mb-4" style="display: none;">
+                    <h5 class="text-neon">إضافة قسم إشارات جديد</h5>
+                    <div class="d-flex gap-2">
+                        <input type="text" id="new-sign-cat-name" class="input-dark mb-0" placeholder="اسم القسم (مثال: الأرقام)...">
+                        <button class="btn-neon" onclick="addCategory('signs')"><i class="fa-solid fa-plus"></i> إضافة</button>
+                    </div>
+                </div>
+                <div class="category-grid" id="signs-categories-grid"></div>
+            </div>
+
+            <div id="signs-items-view" style="display: none;">
+                <button class="btn-outline mb-3" onclick="goBackToCategories('signs')"><i class="fa-solid fa-arrow-right"></i> رجوع للأقسام</button>
+                <h3 id="current-sign-cat-title" class="mb-4 text-neon"></h3>
+                
+                <div class="card-dark admin-only mb-4" style="display: none;">
+    <h4 class="text-neon mb-3"><i class="fa-solid fa-plus"></i> إضافة إشارة جديدة</h4>
+    <input type="text" id="sign-title" class="input-dark" placeholder="اسم الإشارة...">
+    <textarea id="sign-desc" class="input-dark" rows="3" placeholder="شرح الإشارة..."></textarea>
+    <div class="d-flex gap-2 mt-2 mb-2">
+        <select id="sign-media-type" class="input-dark w-25 mb-0" style="padding: 10px;">
+            <option value="youtube">يوتيوب</option>
+            <option value="drive">جوجل درايف</option>
+            <option value="image_link">صورة برابط</option>
+            <option value="link">رابط عادي</option>
+        </select>
+        <input type="text" id="sign-media-url" class="input-dark w-50 mb-0" placeholder="ضع الرابط هنا...">
+        <label class="btn-outline w-25 text-center mb-0" style="padding: 10px; cursor:pointer;"><i class="fa-solid fa-upload"></i> رفع صورة <input type="file" id="sign-img" style="display: none;"></label>
+    </div>
+    <button class="btn-neon w-100 mt-3" onclick="addItem('signs')">حفظ الإشارة</button>
+</div>
+
+                <div id="signs-items-list" class="row"></div>
+            </div>
+        </main>
+
+        <main class="page-content" id="books-tab">
+            <div id="books-categories-view">
+                <div class="card-dark admin-only mb-4" style="display: none;">
+                    <h5 class="text-neon">إضافة تصنيف كتب جديد</h5>
+                    <div class="d-flex gap-2">
+                        <input type="text" id="new-book-cat-name" class="input-dark mb-0" placeholder="اسم التصنيف (مثال: قواميس)...">
+                        <button class="btn-neon" onclick="addCategory('books')"><i class="fa-solid fa-plus"></i> إضافة</button>
+                    </div>
+                </div>
+                <div class="category-grid" id="books-categories-grid"></div>
+            </div>
+
+            <div id="books-items-view" style="display: none;">
+                <button class="btn-outline mb-3" onclick="goBackToCategories('books')"><i class="fa-solid fa-arrow-right"></i> رجوع للتصنيفات</button>
+                <h3 id="current-book-cat-title" class="mb-4 text-neon"></h3>
+                
+                <div class="card-dark admin-only mb-4" style="display: none;">
+    <h4 class="text-warning mb-3"><i class="fa-solid fa-plus"></i> إضافة كتاب / ملف</h4>
+    <input type="text" id="book-title" class="input-dark" placeholder="اسم الكتاب...">
+    <textarea id="book-desc" class="input-dark" rows="3" placeholder="وصف الكتاب..."></textarea>
+    <div class="d-flex gap-2 mt-2 mb-2">
+        <select id="book-media-type" class="input-dark w-25 mb-0" style="padding: 10px;">
+            <option value="drive">جوجل درايف (PDF/فيديو)</option>
+            <option value="youtube">يوتيوب</option>
+            <option value="image_link">صورة غلاف برابط</option>
+            <option value="link">رابط تحميل عادي</option>
+        </select>
+        <input type="text" id="book-media-url" class="input-dark w-50 mb-0" placeholder="ضع الرابط هنا...">
+        <label class="btn-outline w-25 text-center mb-0" style="padding: 10px; cursor:pointer;"><i class="fa-solid fa-upload"></i> رفع غلاف <input type="file" id="book-img" style="display: none;"></label>
+    </div>
+    <button class="btn-warning w-100 mt-3 text-dark fw-bold" onclick="addItem('books')">إضافة الكتاب</button>
+</div>
+
+                <div id="books-items-list" class="row"></div>
+            </div>
+        </main>
+
+        <main class="page-content" id="schools-tab">
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-8">
+                    <h2 class="text-neon mb-4 text-center"><i class="fa-solid fa-school"></i> دليل المدارس</h2>
+                    
+                    <div class="card-dark admin-only mb-4" style="display: none;">
+    <h3 class="text-neon mb-3"><i class="fa-solid fa-school"></i> إضافة مدرسة جديدة</h3>
+    <input type="text" id="school-name" class="input-dark" placeholder="اسم المدرسة...">
+    <input type="text" id="school-location" class="input-dark" placeholder="رابط خرائط جوجل (اختياري)...">
+    <textarea id="school-info" class="input-dark" rows="3" placeholder="معلومات وشروط التقديم..."></textarea>
+    <div class="d-flex gap-2 mt-2 mb-2">
+        <select id="school-media-type" class="input-dark w-25 mb-0" style="padding: 10px;">
+            <option value="youtube">فيديو تعريفي (يوتيوب)</option>
+            <option value="image_link">صورة خارجية (برابط)</option>
+            <option value="drive">مرفق من درايف</option>
+        </select>
+        <input type="text" id="school-media-url" class="input-dark w-50 mb-0" placeholder="ضع الرابط هنا...">
+        <label class="btn-outline w-25 text-center mb-0" style="padding: 10px; cursor:pointer;"><i class="fa-solid fa-upload"></i> رفع صورة <input type="file" id="school-img" style="display: none;" onchange="previewSchoolImage(event)"></label>
+    </div>
+    <img id="school-preview" class="media-preview" style="display: none;">
+    <button class="btn-neon w-100 mt-3" onclick="addSchool()">إضافة المدرسة</button>
+</div>
+
+                    <div id="schools-list"></div>
+                </div>
+            </div>
+        </main>
+
+<main class="page-content" id="chat-tab">
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-10 text-center">
+                    <h2 class="text-warning mb-3"><i class="fa-solid fa-language"></i> المترجم الصوتي الفوري</h2>
+                    <p class="text-light fs-5 mb-4">تواصل بحرية مع أي شخص في العالم. ستقوم الأداة بالترجمة الفورية بينك وبين الطرف الآخر.</p>
+                    
+                    <div class="card-dark mb-4 text-center" style="border: 1px solid var(--neon);">
+                        <div class="row">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label class="text-neon fw-bold mb-2"><i class="fa-solid fa-user"></i> لغتي المريحة (أقرأ وأكتب بها):</label>
+                                <select id="my-lang" class="input-dark mb-0">
+                                    <option value="ar-EG">العربية</option>
+                                    <option value="en-US">English (الإنجليزية)</option>
+                                    <option value="fr-FR">Français (الفرنسية)</option>
+                                    <option value="de-DE">Deutsch (الألمانية)</option>
+                                </select>
                             </div>
-                            ${delBtn}
+                            <div class="col-md-6">
+                                <label class="text-warning fw-bold mb-2"><i class="fa-solid fa-globe"></i> لغة الطرف الآخر (يتحدث ويستمع بها):</label>
+                                <select id="other-lang" class="input-dark mb-0">
+                                    <option value="en-US">English (الإنجليزية)</option>
+                                    <option value="ar-EG">العربية</option>
+                                    <option value="fr-FR">Français (الفرنسية)</option>
+                                    <option value="de-DE">Deutsch (الألمانية)</option>
+                                    <option value="it-IT">Italiano (الإيطالية)</option>
+                                    <option value="es-ES">Español (الإسبانية)</option>
+                                </select>
+                            </div>
                         </div>
-                        <div style="font-size: 16px; white-space: pre-wrap;">${p.text}</div>${imgHTML}${vidHTML}
-                    </div>`;
-            });
-        }
+                    </div>
 
-        function deleteNews(id) {
-            if(confirm('هل أنت متأكد من حذف هذا الخبر؟')) {
-                let posts = JSON.parse(localStorage.getItem('my_news_v1')) || [];
-                posts = posts.filter(item => item.id !== id);
-                localStorage.setItem('my_news_v1', JSON.stringify(posts)); 
-                loadNews();
-            }
-        }
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-4">
+                            <div class="card-dark h-100">
+                                <h4 class="text-neon mb-3"><i class="fa-solid fa-ear-listen"></i> استماع للطرف الآخر</h4>
+                                <p class="text-muted" style="font-size: 14px;">اضغط هنا واجعل الشخص الآخر يتحدث، وسنترجم كلامه لتتمكن من قراءته بلغتك.</p>
+                                <button id="btn-record" class="btn-neon-large w-100 mb-3" onclick="startRecording()">
+                                    <i class="fa-solid fa-microphone"></i> استماع وترجمة
+                                </button>
+                                <textarea id="stt-result" class="input-dark mb-0" rows="4" placeholder="سيظهر كلامه مترجماً هنا لتتمكن من قراءته..." readonly></textarea>
+                            </div>
+                        </div>
 
-        // --- نظام الأقسام (الإشارات والمكتبة) ---
-        function addCategory(type) {
-            let inputId = type === 'signs' ? 'new-sign-cat-name' : 'new-book-cat-name';
-            let name = document.getElementById(inputId).value;
-            if(!name) return;
-            
-            let storageKey = type === 'signs' ? 'signs_cats' : 'books_cats';
-            let cats = JSON.parse(localStorage.getItem(storageKey)) || [];
-            cats.push({ name: name, items: [] });
-            localStorage.setItem(storageKey, JSON.stringify(cats));
-            
-            document.getElementById(inputId).value = ''; 
-            loadCategories(type);
-        }
+                        <div class="col-md-6 mb-4">
+                            <div class="card-dark h-100">
+                                <h4 class="text-warning mb-3"><i class="fa-solid fa-keyboard"></i> التحدث للطرف الآخر</h4>
+                                <p class="text-muted" style="font-size: 14px;">اكتب رسالتك بلغتك، وسنقوم بترجمتها ونطقها بصوت مسموع ليفهمها الطرف الآخر.</p>
+                                <textarea id="tts-input" class="input-dark" rows="3" placeholder="اكتب رسالتك هنا..."></textarea>
+                                <button id="btn-speak" class="w-100 p-3 fw-bold rounded-3 border-0" style="background: #f39c12; color:#141416; font-size: 18px; cursor: pointer; transition: 0.3s;" onclick="speakText()">
+                                    <i class="fa-solid fa-volume-high"></i> نطق الرسالة للطرف الآخر
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <main class="page-content" id="chat-tab">
+            <div class="row justify-content-center mt-4">
+                <div class="col-lg-10 text-center">
+                    <h2 class="text-warning mb-3"><i class="fa-solid fa-language"></i> المترجم الصوتي الفوري</h2>
+                    <p class="text-light fs-5 mb-4">تواصل بحرية مع أي شخص في العالم. ستقوم الأداة بالترجمة الفورية بينك وبين الطرف الآخر.</p>
+                    
+                    <div class="card-dark mb-4 text-center" style="border: 1px solid var(--neon);">
+                        <div class="row">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label class="text-neon fw-bold mb-2"><i class="fa-solid fa-user"></i> لغتي المريحة (أقرأ وأكتب بها):</label>
+                                <select id="my-lang" class="input-dark mb-0">
+                                    <option value="ar-EG">العربية (مصر)</option>
+                                    <option value="ar-SA">العربية (السعودية)</option>
+                                    <option value="en-US">English (الإنجليزية)</option>
+                                    <option value="fr-FR">Français (الفرنسية)</option>
+                                    <option value="de-DE">Deutsch (الألمانية)</option>
+                                    <option value="es-ES">Español (الإسبانية)</option>
+                                    <option value="it-IT">Italiano (الإيطالية)</option>
+                                    <option value="ru-RU">Русский (الروسية)</option>
+                                    <option value="tr-TR">Türkçe (التركية)</option>
+                                    <option value="zh-CN">中文 (الصينية)</option>
+                                    <option value="ja-JP">日本語 (اليابانية)</option>
+                                    <option value="ko-KR">한국어 (الكورية)</option>
+                                    <option value="hi-IN">हिन्दी (الهندية)</option>
+                                    <option value="ur-PK">اردو (الأردية)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-warning fw-bold mb-2"><i class="fa-solid fa-globe"></i> لغة الطرف الآخر (يتحدث ويستمع بها):</label>
+                                <select id="other-lang" class="input-dark mb-0">
+                                    <option value="en-US">English (الإنجليزية)</option>
+                                    <option value="ar-EG">العربية (مصر)</option>
+                                    <option value="ar-SA">العربية (السعودية)</option>
+                                    <option value="fr-FR">Français (الفرنسية)</option>
+                                    <option value="de-DE">Deutsch (الألمانية)</option>
+                                    <option value="es-ES">Español (الإسبانية)</option>
+                                    <option value="it-IT">Italiano (الإيطالية)</option>
+                                    <option value="ru-RU">Русский (الروسية)</option>
+                                    <option value="tr-TR">Türkçe (التركية)</option>
+                                    <option value="zh-CN">中文 (الصينية)</option>
+                                    <option value="ja-JP">日本語 (اليابانية)</option>
+                                    <option value="ko-KR">한국어 (الكورية)</option>
+                                    <option value="hi-IN">हिन्दी (الهندية)</option>
+                                    <option value="ur-PK">اردو (الأردية)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
-        function loadCategories(type) {
-            let storageKey = type === 'signs' ? 'signs_cats' : 'books_cats';
-            let cats = JSON.parse(localStorage.getItem(storageKey)) || [];
-            let grid = document.getElementById(`${type}-categories-grid`);
-            grid.innerHTML = '';
-            
-            cats.forEach((cat, index) => {
-                let delBtn = isAdmin ? `<i class="fa-solid fa-circle-xmark" style="color:#ffb3b3; position:absolute; top:5px; left:5px; font-size: 20px;" onclick="event.stopPropagation(); deleteCategory('${type}', ${index})"></i>` : '';
-                grid.innerHTML += `<div class="cat-btn" onclick="openCategory('${type}', '${cat.name}')">${delBtn}${cat.name}</div>`;
-            });
-        }
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-4">
+                            <div class="card-dark h-100">
+                                <h4 class="text-neon mb-3"><i class="fa-solid fa-ear-listen"></i> استماع للطرف الآخر</h4>
+                                <p class="text-muted" style="font-size: 14px;">اضغط هنا واجعل الشخص الآخر يتحدث، وسنترجم كلامه لتتمكن من قراءته بلغتك.</p>
+                                <button id="btn-record" class="btn-neon-large w-100 mb-3" onclick="startRecording()">
+                                    <i class="fa-solid fa-microphone"></i> استماع وترجمة
+                                </button>
+                                <textarea id="stt-result" class="input-dark mb-0" rows="4" placeholder="سيظهر كلامه مترجماً هنا لتتمكن من قراءته..." readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card-dark h-100">
+                                <h4 class="text-warning mb-3"><i class="fa-solid fa-keyboard"></i> التحدث للطرف الآخر</h4>
+                                <p class="text-muted" style="font-size: 14px;">اكتب رسالتك بلغتك، وسنقوم بترجمتها ونطقها بصوت مسموع ليفهمها الطرف الآخر.</p>
+                                <textarea id="tts-input" class="input-dark" rows="3" placeholder="اكتب رسالتك هنا..."></textarea>
+                                <button id="btn-speak" class="w-100 p-3 fw-bold rounded-3 border-0" style="background: #f39c12; color:#141416; font-size: 18px; cursor: pointer; transition: 0.3s;" onclick="speakText()">
+                                    <i class="fa-solid fa-volume-high"></i> نطق الرسالة للطرف الآخر
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
 
-        function deleteCategory(type, index) {
-            if(confirm("تحذير: سيتم حذف القسم بكل ما بداخله! متأكد؟")) {
-                let storageKey = type === 'signs' ? 'signs_cats' : 'books_cats';
-                let cats = JSON.parse(localStorage.getItem(storageKey)) || [];
-                cats.splice(index, 1); 
-                localStorage.setItem(storageKey, JSON.stringify(cats)); 
-                loadCategories(type);
-            }
-        }
-
-        function openCategory(type, catName) {
-            currentOpenCategory = { type: type, name: catName };
-            document.getElementById(`${type}-categories-view`).style.display = 'none';
-            document.getElementById(`${type}-items-view`).style.display = 'block';
-            document.getElementById(`current-${type.slice(0,-1)}-cat-title`).innerText = `قسم: ${catName}`; 
-            loadItems(type);
-        }
-
-        function goBackToCategories(type) {
-            document.getElementById(`${type}-categories-view`).style.display = 'block';
-            document.getElementById(`${type}-items-view`).style.display = 'none';
-            currentOpenCategory = { type: null, name: null }; 
-            loadCategories(type);
-        }
-
-        function addItem(type) {
-            let isSign = type === 'signs';
-            let title = document.getElementById(isSign ? 'sign-title' : 'book-title').value;
-            let desc = document.getElementById(isSign ? 'sign-desc' : 'book-desc').value;
-            let fileInput = document.getElementById(isSign ? 'sign-img' : 'book-img');
-            let videoUrlRaw = document.getElementById(isSign ? 'sign-video' : 'book-video') ? document.getElementById(isSign ? 'sign-video' : 'book-video').value : null;
-            let finalUrl = convertSmartUrl(videoUrlRaw);
-
-            if(!title) { alert('يجب كتابة العنوان!'); return; }
-            
-            compressImage(fileInput.files[0], compressedImage => {
-                let storageKey = isSign ? 'signs_cats' : 'books_cats';
-                let cats = JSON.parse(localStorage.getItem(storageKey)) || [];
-                let catIndex = cats.findIndex(c => c.name === currentOpenCategory.name);
+        <main class="page-content" id="settings-tab">
+            <div class="card-dark mt-4">
+                <h4 class="text-neon mb-4"><i class="fa-solid fa-sliders"></i> لوحة الإعدادات</h4>
                 
-                if(catIndex > -1) {
-                    cats[catIndex].items.push({ 
-                        id: Date.now(), title: title, desc: desc, image: compressedImage, videoUrl: finalUrl, date: new Date().toLocaleDateString('ar-EG') 
-                    });
-                    localStorage.setItem(storageKey, JSON.stringify(cats));
-                    
-                    // تنظيف الخانات
-                    document.getElementById(isSign ? 'sign-title' : 'book-title').value = ''; 
-                    document.getElementById(isSign ? 'sign-desc' : 'book-desc').value = ''; 
-                    fileInput.value = '';
-                    if(document.getElementById(isSign ? 'sign-video' : 'book-video')) document.getElementById(isSign ? 'sign-video' : 'book-video').value = '';
-                    
-                    loadItems(type);
-                }
-            });
-        }
+                <label class="text-white mb-2">تغيير اللوجو والاسم:</label>
+                <input type="text" id="setting-name" class="input-dark" placeholder="اسم الموقع">
+                <label class="btn-outline w-100 text-center mb-3">رفع لوجو جديد <input type="file" accept="image/*" style="display: none;" onchange="previewLogoFile(event)"></label>
+                <button class="btn-neon w-100 mb-4" onclick="saveSiteSettings()">حفظ الهوية</button>
+                
+                <hr class="border-secondary mb-4">
+                
+                <label class="text-white mb-2">تغيير صورتك الشخصية:</label>
+                <label class="btn-outline w-100 text-center mb-4">اختر صورتك <input type="file" accept="image/*" style="display: none;" onchange="updateProfilePic(event)"></label>
 
-        function loadItems(type) {
-            let storageKey = type === 'signs' ? 'signs_cats' : 'books_cats';
-            let cats = JSON.parse(localStorage.getItem(storageKey)) || [];
-            let cat = cats.find(c => c.name === currentOpenCategory.name);
-            let list = document.getElementById(`${type}-items-list`);
-            list.innerHTML = '';
-            
-            if(cat && cat.items) {
-                cat.items.slice().reverse().forEach(item => {
-                    let imgHTML = item.image ? `<img src="${item.image}" class="media-display">` : '';
-                    let vidHTML = item.videoUrl ? `<iframe src="${item.videoUrl}" class="video-iframe" allowfullscreen></iframe>` : '';
-                    let delBtn = isAdmin ? `<button class="btn-danger-styled mt-2" onclick="deleteItem('${type}', ${item.id})"><i class="fa-solid fa-trash"></i> حذف العنصر</button>` : '';
+                <div class="data-management p-4 rounded-4 mt-4" style="background: rgba(255,255,255,0.05); border: 1px solid #333;">
+                    <h5 class="text-warning"><i class="fa-solid fa-database"></i> إدارة البيانات والنسخ الاحتياطي</h5>
+                    <p class="text-muted" style="font-size: 14px;">احفظ بيانات الموقع في ملف لتتمكن من استرجاعها في أي وقت.</p>
+                    <button class="btn btn-outline-success w-100 mb-3 mt-2" onclick="exportData()"><i class="fa-solid fa-download"></i> تصدير البيانات (تحميل ملف)</button>
+                    <label class="btn btn-outline-info w-100 text-center mb-4" style="cursor: pointer;"><i class="fa-solid fa-file-import"></i> استيراد بيانات (رفع ملف) <input type="file" accept=".json" style="display: none;" onchange="importData(event)"></label>
                     
-                    list.innerHTML += `
-                        <div class="post-card">
-                            <h4 style="color:var(--primary);">${item.title}</h4>
-                            <div style="font-size:12px; color:gray; margin-bottom:10px;">نُشر في: ${item.date}</div>
-                            <p>${item.desc}</p>
-                            ${imgHTML}
-                            ${vidHTML}
-                            <div class="text-end">${delBtn}</div>
-                        </div>`;
-                });
-            }
-        }
+                    <hr class="border-secondary mb-3">
+                    <p class="text-neon" style="font-size: 14px;"><i class="fa-brands fa-github"></i> <strong>للمطورين فقط:</strong> استخراج كود البيانات لرفعه على GitHub ليعمل كبيانات افتراضية.</p>
+                    <button class="btn btn-outline-warning w-100 fw-bold" onclick="generateGithubCode()"><i class="fa-solid fa-code"></i> استخراج كود (data.js)</button>
+                </div>
+            </div>
+        </main>
 
-        function deleteItem(type, itemId) {
-            if(confirm("تأكيد حذف هذا العنصر؟")) {
-                let storageKey = type === 'signs' ? 'signs_cats' : 'books_cats';
-                let cats = JSON.parse(localStorage.getItem(storageKey)) || [];
-                let catIndex = cats.findIndex(c => c.name === currentOpenCategory.name);
-                if(catIndex > -1) {
-                    cats[catIndex].items = cats[catIndex].items.filter(i => i.id !== itemId);
-                    localStorage.setItem(storageKey, JSON.stringify(cats)); 
-                    loadItems(type);
-                }
-            }
-        }
-    </script>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="main.js?v=3"></script>
 </body>
 </html>
