@@ -18,16 +18,24 @@ window.addEventListener('load', function() {
     setTimeout(function() { document.getElementById('splash-screen').classList.add('hidden'); }, 1500); 
     if(isAdmin) document.getElementById('admin-lock-icon').style.color = '#ff4d4d';
 
-    // محرك سحب الداتا الذكي (بيشتغل للزوار الجداد أو لو الذاكرة فاضية)
+    // ================= محرك سحب الداتا العبقري =================
     if (typeof defaultData !== 'undefined') {
-        let currentNews = localStorage.getItem('my_news');
-        // لو الموقع مفيهوش أخبار (يعني زائر جديد أو ذاكرة ممسوحة)، اسحب من ملف data.js فوراً
-        if (!currentNews || currentNews === '[]' || currentNews === null) {
+        if (!isAdmin) {
+            // 1. لو ده زائر عادي: دايماً نفرض عليه أحدث داتا من ملف data.js اللي إنت رفعته
             for (let key in defaultData) { 
                 if (defaultData[key]) localStorage.setItem(key, defaultData[key]); 
             }
+        } else {
+            // 2. لو ده المدير (إنت): نسحب الداتا بس لو الذاكرة فاضية عشان منمسحش شغلك اللي لسه بتضيفه
+            let currentNews = localStorage.getItem('my_news');
+            if (!currentNews || currentNews === '[]' || currentNews === null) {
+                for (let key in defaultData) { 
+                    if (defaultData[key]) localStorage.setItem(key, defaultData[key]); 
+                }
+            }
         }
     }
+    // =========================================================
     
     applyAdminRights(); loadSettings(); loadProfilePic(); loadNews(); loadCategories('signs'); loadCategories('books'); loadSchools();
 });
